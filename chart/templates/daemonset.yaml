@@ -252,31 +252,31 @@ spec:
           hostPath:
             path: /
         {{- end }}
-        {{- range $_, $mount := .Values.extraHostVolumeMounts }}
-        - name: {{ $mount.name }}
-          hostPath:
-            path: {{ $mount.hostPath }}
-        {{- end }}
-        {{- range $_, $mount := .Values.sidecarVolumeMount }}
-        - name: {{ $mount.name }}
-          emptyDir:
-            medium: Memory
-        {{- end }}
-        {{- range $_, $mount := .Values.sidecarHostVolumeMounts }}
-        - name: {{ $mount.name }}
-          hostPath:
-            path: {{ $mount.hostPath }}
-        {{- end }}
-        {{- range $_, $mount := .Values.configmaps }}
-        - name: {{ $mount.name }}
-          configMap:
-            name: {{ $mount.name }}
-        {{- end }}
-        {{- range $_, $mount := .Values.secrets }}
-        - name: {{ $mount.name }}
-          secret:
-            secretName: {{ $mount.name }}
-        {{- end }}
+#        {{- range $_, $mount := .Values.extraHostVolumeMounts }}
+#        - name: {{ $mount.name }}
+#          hostPath:
+#            path: {{ $mount.hostPath }}
+#        {{- end }}
+#        {{- range $_, $mount := .Values.sidecarVolumeMount }}
+#        - name: {{ $mount.name }}
+#          emptyDir:
+#            medium: Memory
+#        {{- end }}
+#        {{- range $_, $mount := .Values.sidecarHostVolumeMounts }}
+#        - name: {{ $mount.name }}
+#          hostPath:
+#            path: {{ $mount.hostPath }}
+#        {{- end }}
+#        {{- range $_, $mount := .Values.configmaps }}
+#        - name: {{ $mount.name }}
+#          configMap:
+#            name: {{ $mount.name }}
+#        {{- end }}
+#        {{- range $_, $mount := .Values.secrets }}
+#        - name: {{ $mount.name }}
+#          secret:
+#            secretName: {{ $mount.name }}
+#        {{- end }}
         {{- if .Values.kubeRBACProxy.enabled }}
         - name: kube-rbac-proxy-config
           configMap:
