@@ -151,14 +151,14 @@ spec:
               mountPath: {{ $mount.mountPath }}
               readOnly: true
             {{- end }}
-            {{- range $_, $mount := .Values.configmaps }}
-            - name: {{ $mount.name }}
-              mountPath: {{ $mount.mountPath }}
-            {{- end }}
-            {{- range $_, $mount := .Values.secrets }}
-            - name: {{ .name }}
-              mountPath: {{ .mountPath }}
-            {{- end }}
+#            {{- range $_, $mount := .Values.configmaps }}
+#            - name: {{ $mount.name }}
+#              mountPath: {{ $mount.mountPath }}
+#            {{- end }}
+#            {{- range $_, $mount := .Values.secrets }}
+#            - name: {{ .name }}
+#              mountPath: {{ .mountPath }}
+#            {{- end }}
         {{- with .Values.sidecars }}
         {{- toYaml . | nindent 8 }}
           {{- if or $.Values.sidecarVolumeMount $.Values.sidecarHostVolumeMounts }}
