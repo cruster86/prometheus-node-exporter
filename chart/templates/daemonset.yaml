@@ -83,42 +83,42 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           {{- end }}
-#          livenessProbe:
-#            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-#            httpGet:
-#              {{- if .Values.kubeRBACProxy.enabled }}
-#              host: 127.0.0.1
-#              {{- end }}
-#              httpHeaders:
-#              {{- range $_, $header := .Values.livenessProbe.httpGet.httpHeaders }}
-#              - name: {{ $header.name }}
-#                value: {{ $header.value }}
-#              {{- end }}
-#              path: /
-#              port: {{ $servicePort }}
-#              scheme: {{ upper .Values.livenessProbe.httpGet.scheme }}
-#            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-#            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-#            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-#            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-#          readinessProbe:
-#            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-#            httpGet:
-#              {{- if .Values.kubeRBACProxy.enabled }}
-#              host: 127.0.0.1
-#              {{- end }}
-#              httpHeaders:
-#              {{- range $_, $header := .Values.readinessProbe.httpGet.httpHeaders }}
-#              - name: {{ $header.name }}
-#                value: {{ $header.value }}
-#              {{- end }}
-#              path: /
-#              port: {{ $servicePort }}
-#              scheme: {{ upper .Values.readinessProbe.httpGet.scheme }}
-#            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-#            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-#            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-#            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          livenessProbe:
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            httpGet:
+              {{- if .Values.kubeRBACProxy.enabled }}
+              host: 127.0.0.1
+              {{- end }}
+              httpHeaders:
+              {{- range $_, $header := .Values.livenessProbe.httpGet.httpHeaders }}
+              - name: {{ $header.name }}
+                value: {{ $header.value }}
+              {{- end }}
+              path: /
+              port: {{ $servicePort }}
+              scheme: {{ upper .Values.livenessProbe.httpGet.scheme }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          readinessProbe:
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            httpGet:
+              {{- if .Values.kubeRBACProxy.enabled }}
+              host: 127.0.0.1
+              {{- end }}
+              httpHeaders:
+              {{- range $_, $header := .Values.readinessProbe.httpGet.httpHeaders }}
+              - name: {{ $header.name }}
+                value: {{ $header.value }}
+              {{- end }}
+              path: /
+              port: {{ $servicePort }}
+              scheme: {{ upper .Values.readinessProbe.httpGet.scheme }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           {{- with .Values.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
@@ -138,86 +138,86 @@ spec:
               {{- end }}
               readOnly: true
             {{- end }}
-#            {{- range $_, $mount := .Values.extraHostVolumeMounts }}
-#            - name: {{ $mount.name }}
-#              mountPath: {{ $mount.mountPath }}
-#              readOnly: {{ $mount.readOnly }}
-#              {{- with $mount.mountPropagation }}
-#              mountPropagation: {{ . }}
-#              {{- end }}
-#            {{- end }}
-#            {{- range $_, $mount := .Values.sidecarVolumeMount }}
-#            - name: {{ $mount.name }}
-#              mountPath: {{ $mount.mountPath }}
-#              readOnly: true
-#            {{- end }}
-#            {{- range $_, $mount := .Values.configmaps }}
-#            - name: {{ $mount.name }}
-#              mountPath: {{ $mount.mountPath }}
-#            {{- end }}
-#            {{- range $_, $mount := .Values.secrets }}
-#            - name: {{ .name }}
-#              mountPath: {{ .mountPath }}
-#            {{- end }}
-#        {{- with .Values.sidecars }}
-#        {{- toYaml . | nindent 8 }}
-#          {{- if or $.Values.sidecarVolumeMount $.Values.sidecarHostVolumeMounts }}
-#          volumeMounts:
-#            {{- range $_, $mount := $.Values.sidecarVolumeMount }}
-#            - name: {{ $mount.name }}
-#              mountPath: {{ $mount.mountPath }}
-#              readOnly: {{ $mount.readOnly }}
-#            {{- end }}
-#            {{- range $_, $mount := $.Values.sidecarHostVolumeMounts }}
-#            - name: {{ $mount.name }}
-#              mountPath: {{ $mount.mountPath }}
-#              readOnly: {{ $mount.readOnly }}
-#            {{- if $mount.mountPropagation }}
-#              mountPropagation: {{ $mount.mountPropagation }}
-#            {{- end }}
-#            {{- end }}
-#          {{- end }}
-#        {{- end }}
-#        {{-  if .Values.kubeRBACProxy.enabled  }}
-#        - name: kube-rbac-proxy
-#          args:
-#            {{-  if .Values.kubeRBACProxy.extraArgs  }}
-#            {{- .Values.kubeRBACProxy.extraArgs | toYaml | nindent 12 }}
-#            {{-  end  }}
-#            - --secure-listen-address=:{{ .Values.service.port}}
-#            - --upstream=http://127.0.0.1:{{ $servicePort }}/
-#            - --proxy-endpoints-port=8888
-#            - --config-file=/etc/kube-rbac-proxy-config/config-file.yaml
-#          volumeMounts:
-#            - name: kube-rbac-proxy-config
-#              mountPath: /etc/kube-rbac-proxy-config
-#          imagePullPolicy: {{ .Values.kubeRBACProxy.image.pullPolicy }}
-#          {{- if .Values.kubeRBACProxy.image.sha }}
-#          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}@sha256:{{ .Values.kubeRBACProxy.image.sha }}"
-#          {{- else }}
-#          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}"
-#          {{- end }}
-#          ports:
-#            - containerPort: {{ .Values.service.port}}
-#              name: "http"
-#            - containerPort: 8888
-#              name: "http-healthz"
-#          readinessProbe:
-#            httpGet:
-#              scheme: HTTPS
-#              port: 8888
-#              path: healthz
-#            initialDelaySeconds: 5
-#            timeoutSeconds: 5
-#          {{- if .Values.kubeRBACProxy.resources }}
-#          resources:
-#          {{ toYaml .Values.kubeRBACProxy.resources | nindent 12 }}
-#          {{- end }}
-#          {{- if .Values.kubeRBACProxy.containerSecurityContext }}
-#          securityContext:
-#          {{ toYaml .Values.kubeRBACProxy.containerSecurityContext | nindent 12 }}
-#        {{- end }}
-#        {{- end }}
+            {{- range $_, $mount := .Values.extraHostVolumeMounts }}
+            - name: {{ $mount.name }}
+              mountPath: {{ $mount.mountPath }}
+              readOnly: {{ $mount.readOnly }}
+              {{- with $mount.mountPropagation }}
+              mountPropagation: {{ . }}
+              {{- end }}
+            {{- end }}
+            {{- range $_, $mount := .Values.sidecarVolumeMount }}
+            - name: {{ $mount.name }}
+              mountPath: {{ $mount.mountPath }}
+              readOnly: true
+            {{- end }}
+            {{- range $_, $mount := .Values.configmaps }}
+            - name: {{ $mount.name }}
+              mountPath: {{ $mount.mountPath }}
+            {{- end }}
+            {{- range $_, $mount := .Values.secrets }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+          {{- if or $.Values.sidecarVolumeMount $.Values.sidecarHostVolumeMounts }}
+          volumeMounts:
+            {{- range $_, $mount := $.Values.sidecarVolumeMount }}
+            - name: {{ $mount.name }}
+              mountPath: {{ $mount.mountPath }}
+              readOnly: {{ $mount.readOnly }}
+            {{- end }}
+            {{- range $_, $mount := $.Values.sidecarHostVolumeMounts }}
+            - name: {{ $mount.name }}
+              mountPath: {{ $mount.mountPath }}
+              readOnly: {{ $mount.readOnly }}
+            {{- if $mount.mountPropagation }}
+              mountPropagation: {{ $mount.mountPropagation }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{-  if .Values.kubeRBACProxy.enabled  }}
+        - name: kube-rbac-proxy
+          args:
+            {{-  if .Values.kubeRBACProxy.extraArgs  }}
+            {{- .Values.kubeRBACProxy.extraArgs | toYaml | nindent 12 }}
+            {{-  end  }}
+            - --secure-listen-address=:{{ .Values.service.port}}
+            - --upstream=http://127.0.0.1:{{ $servicePort }}/
+            - --proxy-endpoints-port=8888
+            - --config-file=/etc/kube-rbac-proxy-config/config-file.yaml
+          volumeMounts:
+            - name: kube-rbac-proxy-config
+              mountPath: /etc/kube-rbac-proxy-config
+          imagePullPolicy: {{ .Values.kubeRBACProxy.image.pullPolicy }}
+          {{- if .Values.kubeRBACProxy.image.sha }}
+          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}@sha256:{{ .Values.kubeRBACProxy.image.sha }}"
+          {{- else }}
+          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}"
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.service.port}}
+              name: "http"
+            - containerPort: 8888
+              name: "http-healthz"
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              port: 8888
+              path: healthz
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+          {{- if .Values.kubeRBACProxy.resources }}
+          resources:
+          {{ toYaml .Values.kubeRBACProxy.resources | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeRBACProxy.containerSecurityContext }}
+          securityContext:
+          {{ toYaml .Values.kubeRBACProxy.containerSecurityContext | nindent 12 }}
+        {{- end }}
+        {{- end }}
       {{- if or .Values.imagePullSecrets .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- include "prometheus-node-exporter.imagePullSecrets" (dict "Values" .Values "imagePullSecrets" .Values.imagePullSecrets) | indent 8 }}
@@ -252,33 +252,33 @@ spec:
           hostPath:
             path: /
         {{- end }}
-#        {{- range $_, $mount := .Values.extraHostVolumeMounts }}
-#        - name: {{ $mount.name }}
-#          hostPath:
-#            path: {{ $mount.hostPath }}
-#        {{- end }}
-#        {{- range $_, $mount := .Values.sidecarVolumeMount }}
-#        - name: {{ $mount.name }}
-#          emptyDir:
-#            medium: Memory
-#        {{- end }}
-#        {{- range $_, $mount := .Values.sidecarHostVolumeMounts }}
-#        - name: {{ $mount.name }}
-#          hostPath:
-#            path: {{ $mount.hostPath }}
-#        {{- end }}
-#        {{- range $_, $mount := .Values.configmaps }}
-#        - name: {{ $mount.name }}
-#          configMap:
-#            name: {{ $mount.name }}
-#        {{- end }}
-#        {{- range $_, $mount := .Values.secrets }}
-#        - name: {{ $mount.name }}
-#          secret:
-#            secretName: {{ $mount.name }}
-#        {{- end }}
-#        {{- if .Values.kubeRBACProxy.enabled }}
-#        - name: kube-rbac-proxy-config
-#          configMap:
-#            name: {{ template "prometheus-node-exporter.fullname" . }}-rbac-config
-#        {{- end }}
+        {{- range $_, $mount := .Values.extraHostVolumeMounts }}
+        - name: {{ $mount.name }}
+          hostPath:
+            path: {{ $mount.hostPath }}
+        {{- end }}
+        {{- range $_, $mount := .Values.sidecarVolumeMount }}
+        - name: {{ $mount.name }}
+          emptyDir:
+            medium: Memory
+        {{- end }}
+        {{- range $_, $mount := .Values.sidecarHostVolumeMounts }}
+        - name: {{ $mount.name }}
+          hostPath:
+            path: {{ $mount.hostPath }}
+        {{- end }}
+        {{- range $_, $mount := .Values.configmaps }}
+        - name: {{ $mount.name }}
+          configMap:
+            name: {{ $mount.name }}
+        {{- end }}
+        {{- range $_, $mount := .Values.secrets }}
+        - name: {{ $mount.name }}
+          secret:
+            secretName: {{ $mount.name }}
+        {{- end }}
+        {{- if .Values.kubeRBACProxy.enabled }}
+        - name: kube-rbac-proxy-config
+          configMap:
+            name: {{ template "prometheus-node-exporter.fullname" . }}-rbac-config
+        {{- end }}
