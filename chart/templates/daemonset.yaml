@@ -178,46 +178,46 @@ spec:
 #            {{- end }}
 #          {{- end }}
 #        {{- end }}
-        {{-  if .Values.kubeRBACProxy.enabled  }}
-        - name: kube-rbac-proxy
-          args:
-            {{-  if .Values.kubeRBACProxy.extraArgs  }}
-            {{- .Values.kubeRBACProxy.extraArgs | toYaml | nindent 12 }}
-            {{-  end  }}
-            - --secure-listen-address=:{{ .Values.service.port}}
-            - --upstream=http://127.0.0.1:{{ $servicePort }}/
-            - --proxy-endpoints-port=8888
-            - --config-file=/etc/kube-rbac-proxy-config/config-file.yaml
-          volumeMounts:
-            - name: kube-rbac-proxy-config
-              mountPath: /etc/kube-rbac-proxy-config
-          imagePullPolicy: {{ .Values.kubeRBACProxy.image.pullPolicy }}
-          {{- if .Values.kubeRBACProxy.image.sha }}
-          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}@sha256:{{ .Values.kubeRBACProxy.image.sha }}"
-          {{- else }}
-          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}"
-          {{- end }}
-          ports:
-            - containerPort: {{ .Values.service.port}}
-              name: "http"
-            - containerPort: 8888
-              name: "http-healthz"
-          readinessProbe:
-            httpGet:
-              scheme: HTTPS
-              port: 8888
-              path: healthz
-            initialDelaySeconds: 5
-            timeoutSeconds: 5
-          {{- if .Values.kubeRBACProxy.resources }}
-          resources:
-          {{ toYaml .Values.kubeRBACProxy.resources | nindent 12 }}
-          {{- end }}
-          {{- if .Values.kubeRBACProxy.containerSecurityContext }}
-          securityContext:
-          {{ toYaml .Values.kubeRBACProxy.containerSecurityContext | nindent 12 }}
-        {{- end }}
-        {{- end }}
+#        {{-  if .Values.kubeRBACProxy.enabled  }}
+#        - name: kube-rbac-proxy
+#          args:
+#            {{-  if .Values.kubeRBACProxy.extraArgs  }}
+#            {{- .Values.kubeRBACProxy.extraArgs | toYaml | nindent 12 }}
+#            {{-  end  }}
+#            - --secure-listen-address=:{{ .Values.service.port}}
+#            - --upstream=http://127.0.0.1:{{ $servicePort }}/
+#            - --proxy-endpoints-port=8888
+#            - --config-file=/etc/kube-rbac-proxy-config/config-file.yaml
+#          volumeMounts:
+#            - name: kube-rbac-proxy-config
+#              mountPath: /etc/kube-rbac-proxy-config
+#          imagePullPolicy: {{ .Values.kubeRBACProxy.image.pullPolicy }}
+#          {{- if .Values.kubeRBACProxy.image.sha }}
+#          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}@sha256:{{ .Values.kubeRBACProxy.image.sha }}"
+#          {{- else }}
+#          image: "{{ .Values.global.imageRegistry | default .Values.kubeRBACProxy.image.registry}}/{{ .Values.kubeRBACProxy.image.repository }}:{{ .Values.kubeRBACProxy.image.tag }}"
+#          {{- end }}
+#          ports:
+#            - containerPort: {{ .Values.service.port}}
+#              name: "http"
+#            - containerPort: 8888
+#              name: "http-healthz"
+#          readinessProbe:
+#            httpGet:
+#              scheme: HTTPS
+#              port: 8888
+#              path: healthz
+#            initialDelaySeconds: 5
+#            timeoutSeconds: 5
+#          {{- if .Values.kubeRBACProxy.resources }}
+#          resources:
+#          {{ toYaml .Values.kubeRBACProxy.resources | nindent 12 }}
+#          {{- end }}
+#          {{- if .Values.kubeRBACProxy.containerSecurityContext }}
+#          securityContext:
+#          {{ toYaml .Values.kubeRBACProxy.containerSecurityContext | nindent 12 }}
+#        {{- end }}
+#        {{- end }}
       {{- if or .Values.imagePullSecrets .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- include "prometheus-node-exporter.imagePullSecrets" (dict "Values" .Values "imagePullSecrets" .Values.imagePullSecrets) | indent 8 }}
