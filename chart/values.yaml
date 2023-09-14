@@ -368,10 +368,10 @@ extraHostVolumeMounts: []
 
 ## Additional configmaps to be mounted.
 ##
-configmaps: []
+#configmaps: []
 # - name: <configMapName>
 #   mountPath: <mountPath>
-secrets: []
+#secrets: []
 # - name: <secretName>
 #   mountPath: <mountPatch>
 ## Override the deployment namespace
