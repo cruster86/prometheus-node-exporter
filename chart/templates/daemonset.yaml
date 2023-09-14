@@ -159,25 +159,25 @@ spec:
 #            - name: {{ .name }}
 #              mountPath: {{ .mountPath }}
 #            {{- end }}
-        {{- with .Values.sidecars }}
-        {{- toYaml . | nindent 8 }}
-          {{- if or $.Values.sidecarVolumeMount $.Values.sidecarHostVolumeMounts }}
-          volumeMounts:
-            {{- range $_, $mount := $.Values.sidecarVolumeMount }}
-            - name: {{ $mount.name }}
-              mountPath: {{ $mount.mountPath }}
-              readOnly: {{ $mount.readOnly }}
-            {{- end }}
-            {{- range $_, $mount := $.Values.sidecarHostVolumeMounts }}
-            - name: {{ $mount.name }}
-              mountPath: {{ $mount.mountPath }}
-              readOnly: {{ $mount.readOnly }}
-            {{- if $mount.mountPropagation }}
-              mountPropagation: {{ $mount.mountPropagation }}
-            {{- end }}
-            {{- end }}
-          {{- end }}
-        {{- end }}
+#        {{- with .Values.sidecars }}
+#        {{- toYaml . | nindent 8 }}
+#          {{- if or $.Values.sidecarVolumeMount $.Values.sidecarHostVolumeMounts }}
+#          volumeMounts:
+#            {{- range $_, $mount := $.Values.sidecarVolumeMount }}
+#            - name: {{ $mount.name }}
+#              mountPath: {{ $mount.mountPath }}
+#              readOnly: {{ $mount.readOnly }}
+#            {{- end }}
+#            {{- range $_, $mount := $.Values.sidecarHostVolumeMounts }}
+#            - name: {{ $mount.name }}
+#              mountPath: {{ $mount.mountPath }}
+#              readOnly: {{ $mount.readOnly }}
+#            {{- if $mount.mountPropagation }}
+#              mountPropagation: {{ $mount.mountPropagation }}
+#            {{- end }}
+#            {{- end }}
+#          {{- end }}
+#        {{- end }}
         {{-  if .Values.kubeRBACProxy.enabled  }}
         - name: kube-rbac-proxy
           args:
