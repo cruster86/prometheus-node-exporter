@@ -157,7 +157,7 @@ spec:
             {{- end }}
             {{- range $_, $mount := .Values.secrets }}
             - name: {{ $mount.name }}
-              mountPath: {{ .mountPath }}
+              mountPath: {{ $mount.mountPath }}
             {{- end }}
         {{- with .Values.sidecars }}
         {{- toYaml . | nindent 8 }}
