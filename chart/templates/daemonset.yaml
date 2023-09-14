@@ -156,7 +156,7 @@ spec:
               mountPath: {{ $mount.mountPath }}
             {{- end }}
             {{- range $_, $mount := .Values.secrets }}
-            - name: {{ .name }}
+            - name: {{ $mount.name }}
               mountPath: {{ .mountPath }}
             {{- end }}
         {{- with .Values.sidecars }}
