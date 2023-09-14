@@ -138,19 +138,19 @@ spec:
               {{- end }}
               readOnly: true
             {{- end }}
-            {{- range $_, $mount := .Values.extraHostVolumeMounts }}
-            - name: {{ $mount.name }}
-              mountPath: {{ $mount.mountPath }}
-              readOnly: {{ $mount.readOnly }}
-              {{- with $mount.mountPropagation }}
-              mountPropagation: {{ . }}
-              {{- end }}
-            {{- end }}
-            {{- range $_, $mount := .Values.sidecarVolumeMount }}
-            - name: {{ $mount.name }}
-              mountPath: {{ $mount.mountPath }}
-              readOnly: true
-            {{- end }}
+#            {{- range $_, $mount := .Values.extraHostVolumeMounts }}
+#            - name: {{ $mount.name }}
+#              mountPath: {{ $mount.mountPath }}
+#              readOnly: {{ $mount.readOnly }}
+#              {{- with $mount.mountPropagation }}
+#              mountPropagation: {{ . }}
+#              {{- end }}
+#            {{- end }}
+#            {{- range $_, $mount := .Values.sidecarVolumeMount }}
+#            - name: {{ $mount.name }}
+#              mountPath: {{ $mount.mountPath }}
+#              readOnly: true
+#            {{- end }}
 #            {{- range $_, $mount := .Values.configmaps }}
 #            - name: {{ $mount.name }}
 #              mountPath: {{ $mount.mountPath }}
