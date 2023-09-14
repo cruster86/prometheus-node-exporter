@@ -273,9 +273,9 @@ spec:
             name: {{ $mount.name }}
         {{- end }}
         {{- range $_, $mount := .Values.secrets }}
-        - name: {{ $mount.name }}
+        - name: {{ $.name }}
           secret:
-            secretName: {{ $mount.name }}
+            secretName: {{ $.name }}
         {{- end }}
         {{- if .Values.kubeRBACProxy.enabled }}
         - name: kube-rbac-proxy-config
